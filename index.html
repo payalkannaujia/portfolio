@@ -33,15 +33,11 @@
     overflow-x: hidden;
   }
 
-  /* NOISE OVERLAY */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.6;
+    pointer-events: none; z-index: 0; opacity: 0.6;
   }
 
   /* NAV */
@@ -54,29 +50,32 @@
     border-bottom: 1px solid var(--border);
   }
   .nav-logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800; font-size: 1.1rem;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem;
     background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.04em; cursor: default;
   }
   .nav-links { display: flex; gap: 2.2rem; list-style: none; }
   .nav-links a {
     color: var(--muted); text-decoration: none; font-size: 0.88rem;
     letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500;
+    position: relative; padding-bottom: 4px;
     transition: color 0.25s;
   }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--grad); border-radius: 2px;
+    transition: width 0.3s ease;
+  }
   .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { width: 100%; }
 
   /* HERO */
   .hero {
-    min-height: 100vh;
-    display: flex; align-items: center;
-    padding: 8rem 4rem 5rem;
-    position: relative; overflow: hidden;
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 8rem 4rem 5rem; position: relative; overflow: hidden;
   }
-  .hero-orb {
-    position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none;
-  }
+  .hero-orb { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; }
   .orb1 { width: 500px; height: 500px; background: rgba(124,106,247,0.22); top: -80px; right: -100px; }
   .orb2 { width: 380px; height: 380px; background: rgba(247,106,138,0.15); bottom: 0; left: -80px; }
   .orb3 { width: 280px; height: 280px; background: rgba(106,247,200,0.1); top: 40%; left: 50%; }
@@ -94,102 +93,85 @@
 
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
   @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes popIn { from{opacity:0;transform:scale(0.5) translateX(20px)} to{opacity:1;transform:scale(1) translateX(0)} }
 
   .hero h1 {
     font-family: 'Syne', sans-serif;
     font-size: clamp(3rem, 7vw, 5.5rem);
-    font-weight: 800; line-height: 1.05;
-    letter-spacing: -0.02em;
+    font-weight: 800; line-height: 1.05; letter-spacing: -0.02em;
     animation: fadeUp 0.7s 0.1s ease both;
   }
   .h1-name { display: block; }
-  .h1-grad {
-    background: var(--grad);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
+  .h1-grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
   .hero-sub {
     font-size: 1.15rem; color: var(--muted); margin: 1.6rem 0 2.4rem;
-    max-width: 560px; font-weight: 300;
-    animation: fadeUp 0.7s 0.2s ease both;
+    max-width: 560px; font-weight: 300; animation: fadeUp 0.7s 0.2s ease both;
   }
-  .hero-ctas {
-    display: flex; gap: 1rem; flex-wrap: wrap;
-    animation: fadeUp 0.7s 0.3s ease both;
-  }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.7s 0.3s ease both; }
   .btn {
     padding: 0.85rem 2rem; border-radius: 999px; font-size: 0.95rem; font-weight: 500;
     text-decoration: none; cursor: pointer; border: none; transition: all 0.25s;
     font-family: 'DM Sans', sans-serif;
   }
-  .btn-primary {
-    background: var(--grad); color: #fff;
-  }
-  .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
-  .btn-outline {
-    background: transparent; color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-outline:hover { background: var(--card); transform: translateY(-2px); }
+  .btn-primary { background: var(--grad); color: #fff; }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-3px) scale(1.03); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline:hover { background: rgba(124,106,247,0.1); border-color: rgba(124,106,247,0.5); transform: translateY(-3px) scale(1.03); }
 
   /* STATS */
   .stats-bar {
     background: var(--bg3); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
     padding: 2.5rem 4rem;
-    display: grid; grid-template-columns: repeat(4,1fr);
-    gap: 1rem;
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem;
   }
-  .stat { text-align: center; }
+  .stat { text-align: center; padding: 1rem; border-radius: 12px; transition: background 0.25s, transform 0.25s; cursor: default; }
+  .stat:hover { background: rgba(124,106,247,0.07); transform: translateY(-4px); }
   .stat-num {
     font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800;
-    background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    display: block;
+    background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block;
   }
   .stat-label { font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; }
 
   /* SECTIONS */
   section { padding: 6rem 4rem; position: relative; }
-  .section-label {
-    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em;
-    color: var(--accent); font-weight: 600; margin-bottom: 0.6rem;
-  }
-  .section-title {
-    font-family: 'Syne', sans-serif; font-size: clamp(2rem,4vw,3rem);
-    font-weight: 800; letter-spacing: -0.02em; margin-bottom: 3.5rem;
-  }
-  .section-title span {
-    background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
+  .section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 600; margin-bottom: 0.6rem; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem,4vw,3rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 3.5rem; }
+  .section-title span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
   /* SKILLS */
   #skills { background: var(--bg2); }
-  .skills-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
-    gap: 1.5rem;
-  }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1.5rem; }
   .skill-card {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 1.6rem;
-    transition: border-color 0.25s, transform 0.25s;
+    border-radius: 16px; padding: 1.6rem; cursor: default;
+    transition: border-color 0.3s, transform 0.3s, background 0.3s;
   }
-  .skill-card:hover { border-color: rgba(124,106,247,0.5); transform: translateY(-4px); }
+  .skill-card:hover {
+    border-color: rgba(124,106,247,0.6);
+    transform: translateY(-6px) scale(1.02);
+    background: rgba(124,106,247,0.07);
+  }
   .skill-icon {
     width: 44px; height: 44px; border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
     font-size: 1.3rem; margin-bottom: 1rem;
+    transition: transform 0.3s;
   }
+  .skill-card:hover .skill-icon { transform: scale(1.2) rotate(-6deg); }
   .icon-purple { background: rgba(124,106,247,0.15); }
   .icon-pink { background: rgba(247,106,138,0.15); }
   .icon-teal { background: rgba(106,247,200,0.15); }
   .icon-amber { background: rgba(247,200,106,0.15); }
-
   .skill-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.7rem; }
   .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
   .tag {
     font-size: 0.76rem; padding: 0.25rem 0.7rem; border-radius: 999px;
     border: 1px solid var(--border); color: var(--muted);
     background: rgba(255,255,255,0.03);
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
   }
+  .skill-card:hover .tag { border-color: rgba(124,106,247,0.35); color: #c4bfff; background: rgba(124,106,247,0.08); }
 
   /* EXPERIENCE */
   #experience { background: var(--bg); }
@@ -198,40 +180,50 @@
     content: ''; position: absolute; left: 0; top: 0; bottom: 0;
     width: 1px; background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
   }
-  .exp-item { position: relative; margin-bottom: 3.5rem; padding-left: 2rem; }
+  .exp-item {
+    position: relative; margin-bottom: 3.5rem;
+    padding: 1.5rem 1.5rem 1.5rem 2rem;
+    border-radius: 16px; border: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s, transform 0.3s; cursor: default;
+  }
+  .exp-item:hover {
+    border-color: rgba(124,106,247,0.3);
+    background: rgba(124,106,247,0.05);
+    transform: translateX(8px);
+  }
   .exp-dot {
-    position: absolute; left: -2.45rem; top: 0.35rem;
+    position: absolute; left: -2.45rem; top: 1.8rem;
     width: 14px; height: 14px; border-radius: 50%;
     background: var(--grad); box-shadow: 0 0 12px rgba(124,106,247,0.6);
+    transition: transform 0.3s, box-shadow 0.3s;
   }
-  .exp-period {
-    font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em;
-    color: var(--accent); font-weight: 600; margin-bottom: 0.4rem;
-  }
-  .exp-title {
-    font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.2rem;
-  }
+  .exp-item:hover .exp-dot { transform: scale(1.5); box-shadow: 0 0 22px rgba(124,106,247,1); }
+  .exp-period { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-weight: 600; margin-bottom: 0.4rem; }
+  .exp-title { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.2rem; }
   .exp-company { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; font-weight: 300; }
   .exp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
   .exp-tag {
     font-size: 0.78rem; padding: 0.3rem 0.8rem; border-radius: 999px;
     background: rgba(124,106,247,0.1); color: #a99ff7;
     border: 1px solid rgba(124,106,247,0.2);
+    transition: background 0.2s, border-color 0.2s;
   }
+  .exp-item:hover .exp-tag { background: rgba(124,106,247,0.18); border-color: rgba(124,106,247,0.4); }
 
   /* EDUCATION */
   #education { background: var(--bg2); }
   .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1.5rem; }
   .edu-card {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 1.6rem;
-    transition: border-color 0.25s, transform 0.25s;
+    border-radius: 16px; padding: 1.6rem; cursor: default;
+    transition: border-color 0.3s, transform 0.3s, background 0.3s;
   }
-  .edu-card:hover { border-color: rgba(247,106,138,0.4); transform: translateY(-4px); }
-  .edu-year {
-    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
-    color: var(--accent2); font-weight: 600; margin-bottom: 0.5rem;
+  .edu-card:hover {
+    border-color: rgba(247,106,138,0.5);
+    transform: translateY(-5px) scale(1.02);
+    background: rgba(247,106,138,0.06);
   }
+  .edu-year { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent2); font-weight: 600; margin-bottom: 0.5rem; }
   .edu-degree { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
   .edu-inst { font-size: 0.88rem; color: var(--muted); }
 
@@ -249,19 +241,63 @@
     display: flex; align-items: center; gap: 1rem;
     padding: 1rem 1.5rem; border-radius: 12px;
     border: 1px solid var(--border); text-decoration: none; color: var(--text);
-    font-size: 0.9rem; transition: all 0.25s;
-    background: rgba(255,255,255,0.02);
+    font-size: 0.9rem; background: rgba(255,255,255,0.02);
+    transition: all 0.3s;
   }
-  .contact-link:hover { border-color: rgba(124,106,247,0.4); background: rgba(124,106,247,0.07); }
+  .contact-link:hover {
+    border-color: rgba(124,106,247,0.5);
+    background: rgba(124,106,247,0.08);
+    transform: translateX(6px);
+  }
   .cl-icon {
     width: 38px; height: 38px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center; font-size: 1rem;
-    flex-shrink: 0;
+    flex-shrink: 0; transition: transform 0.3s;
   }
+  .contact-link:hover .cl-icon { transform: scale(1.2) rotate(-8deg); }
   .cl-icon.purple { background: rgba(124,106,247,0.15); }
   .cl-icon.pink { background: rgba(247,106,138,0.15); }
-  .cl-label { font-weight: 500; }
-  .cl-value { font-size: 0.82rem; color: var(--muted); }
+  .cl-icon.green { background: rgba(37,211,102,0.15); }
+  .cl-label { font-weight: 500; text-align: left; }
+  .cl-value { font-size: 0.82rem; color: var(--muted); text-align: left; }
+
+  /* FLOATING BUTTONS */
+  .float-btns {
+    position: fixed; right: 1.4rem; bottom: 2rem;
+    display: flex; flex-direction: column; gap: 0.8rem;
+    z-index: 999;
+  }
+  .float-btn {
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: transform 0.3s;
+    position: relative;
+  }
+  .float-btn:nth-child(1) { animation: popIn 0.5s 0.1s ease both; }
+  .float-btn:nth-child(2) { animation: popIn 0.5s 0.25s ease both; }
+  .float-btn:nth-child(3) { animation: popIn 0.5s 0.4s ease both; }
+  .float-btn:hover { transform: scale(1.18) translateY(-3px); }
+
+  .float-wa  { background: #25d366; box-shadow: 0 4px 18px rgba(37,211,102,0.35); }
+  .float-wa:hover  { box-shadow: 0 6px 26px rgba(37,211,102,0.6); }
+  .float-call { background: #1a73e8; box-shadow: 0 4px 18px rgba(26,115,232,0.35); }
+  .float-call:hover { box-shadow: 0 6px 26px rgba(26,115,232,0.6); }
+  .float-mail { background: #f76a8a; box-shadow: 0 4px 18px rgba(247,106,138,0.35); }
+  .float-mail:hover { box-shadow: 0 6px 26px rgba(247,106,138,0.6); }
+
+  /* tooltip */
+  .float-tip {
+    position: absolute; right: 64px;
+    background: rgba(18,18,26,0.96); color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 500;
+    padding: 0.38rem 0.8rem; border-radius: 8px; white-space: nowrap;
+    border: 1px solid var(--border);
+    opacity: 0; pointer-events: none;
+    transform: translateX(10px);
+    transition: opacity 0.22s, transform 0.22s;
+  }
+  .float-btn:hover .float-tip { opacity: 1; transform: translateX(0); }
 
   /* FOOTER */
   footer {
@@ -281,6 +317,9 @@
     .hero { padding: 6rem 1.5rem 3rem; }
     .stats-bar { grid-template-columns: repeat(2,1fr); padding: 2rem 1.5rem; }
     section { padding: 4rem 1.5rem; }
+    .float-btns { right: 0.8rem; bottom: 1.2rem; }
+    .float-btn { width: 46px; height: 46px; }
+    .float-tip { display: none; }
   }
 </style>
 </head>
@@ -296,6 +335,29 @@
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
+
+<!-- FLOATING CONTACT BUTTONS -->
+<div class="float-btns">
+  <a href="https://wa.me/918929376368" target="_blank" class="float-btn float-wa">
+    <span class="float-tip">WhatsApp</span>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.564 4.136 1.544 5.872L0 24l6.294-1.524A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.8 9.8 0 01-4.989-1.361l-.358-.213-3.716.9.934-3.618-.234-.373A9.773 9.773 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+    </svg>
+  </a>
+  <a href="tel:+918929376368" class="float-btn float-call">
+    <span class="float-tip">+91 89293 76368</span>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+      <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/>
+    </svg>
+  </a>
+  <a href="mailto:payalkanojia27001@gmail.com" class="float-btn float-mail">
+    <span class="float-tip">Send Email</span>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+      <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+    </svg>
+  </a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -321,103 +383,64 @@
 
 <!-- STATS -->
 <div class="stats-bar">
-  <div class="stat reveal">
-    <span class="stat-num">3+</span>
-    <span class="stat-label">Years Experience</span>
-  </div>
-  <div class="stat reveal">
-    <span class="stat-num">3</span>
-    <span class="stat-label">Companies</span>
-  </div>
-  <div class="stat reveal">
-    <span class="stat-num">20+</span>
-    <span class="stat-label">Core Skills</span>
-  </div>
-  <div class="stat reveal">
-    <span class="stat-num">∞</span>
-    <span class="stat-label">Campaigns Run</span>
-  </div>
+  <div class="stat reveal"><span class="stat-num">3+</span><span class="stat-label">Years Experience</span></div>
+  <div class="stat reveal"><span class="stat-num">3</span><span class="stat-label">Companies</span></div>
+  <div class="stat reveal"><span class="stat-num">20+</span><span class="stat-label">Core Skills</span></div>
+  <div class="stat reveal"><span class="stat-num">∞</span><span class="stat-label">Campaigns Run</span></div>
 </div>
 
 <!-- SKILLS -->
 <section id="skills">
   <div class="section-label">What I Do</div>
   <div class="section-title">Core <span>Expertise</span></div>
-
   <div class="skills-grid">
     <div class="skill-card reveal">
       <div class="skill-icon icon-purple">📣</div>
       <h3>Paid Advertising</h3>
       <div class="tags">
-        <span class="tag">Google Ads</span>
-        <span class="tag">Meta Ads</span>
-        <span class="tag">Search Ads</span>
-        <span class="tag">Display Ads</span>
-        <span class="tag">Performance Max</span>
-        <span class="tag">Facebook Ads</span>
-        <span class="tag">Instagram Ads</span>
+        <span class="tag">Google Ads</span><span class="tag">Meta Ads</span><span class="tag">Search Ads</span>
+        <span class="tag">Display Ads</span><span class="tag">Performance Max</span><span class="tag">Facebook Ads</span><span class="tag">Instagram Ads</span>
       </div>
     </div>
-
     <div class="skill-card reveal">
       <div class="skill-icon icon-teal">🔍</div>
       <h3>SEO & Web</h3>
       <div class="tags">
-        <span class="tag">On-Page SEO</span>
-        <span class="tag">Off-Page SEO</span>
-        <span class="tag">Keyword Research</span>
-        <span class="tag">WordPress</span>
-        <span class="tag">Landing Pages</span>
-        <span class="tag">Website Optimization</span>
+        <span class="tag">On-Page SEO</span><span class="tag">Off-Page SEO</span><span class="tag">Keyword Research</span>
+        <span class="tag">WordPress</span><span class="tag">Landing Pages</span><span class="tag">Website Optimization</span>
       </div>
     </div>
-
     <div class="skill-card reveal">
       <div class="skill-icon icon-pink">📱</div>
       <h3>Social Media</h3>
       <div class="tags">
-        <span class="tag">SMO</span>
-        <span class="tag">Content Creation</span>
-        <span class="tag">Content Scheduling</span>
-        <span class="tag">WhatsApp Marketing</span>
-        <span class="tag">Email Marketing</span>
+        <span class="tag">SMO</span><span class="tag">Content Creation</span><span class="tag">Content Scheduling</span>
+        <span class="tag">WhatsApp Marketing</span><span class="tag">Email Marketing</span>
       </div>
     </div>
-
     <div class="skill-card reveal">
       <div class="skill-icon icon-amber">📊</div>
       <h3>Analytics & Tracking</h3>
       <div class="tags">
-        <span class="tag">Google Analytics (GA4)</span>
-        <span class="tag">Google Tag Manager</span>
-        <span class="tag">Meta Pixel</span>
-        <span class="tag">Campaign Reporting</span>
-        <span class="tag">Data Analysis</span>
-        <span class="tag">Market Research</span>
+        <span class="tag">Google Analytics (GA4)</span><span class="tag">Google Tag Manager</span>
+        <span class="tag">Meta Pixel</span><span class="tag">Campaign Reporting</span>
+        <span class="tag">Data Analysis</span><span class="tag">Market Research</span>
       </div>
     </div>
-
     <div class="skill-card reveal">
       <div class="skill-icon icon-teal">🎨</div>
       <h3>Design & Creative</h3>
       <div class="tags">
-        <span class="tag">Canva</span>
-        <span class="tag">CorelDRAW</span>
-        <span class="tag">Social Media Creatives</span>
-        <span class="tag">Visual Content</span>
+        <span class="tag">Canva</span><span class="tag">CorelDRAW</span>
+        <span class="tag">Social Media Creatives</span><span class="tag">Visual Content</span>
       </div>
     </div>
-
     <div class="skill-card reveal">
       <div class="skill-icon icon-purple">💻</div>
       <h3>Technical Skills</h3>
       <div class="tags">
-        <span class="tag">HTML</span>
-        <span class="tag">CSS</span>
-        <span class="tag">JavaScript</span>
-        <span class="tag">PHP</span>
-        <span class="tag">MySQL</span>
-        <span class="tag">MS Office</span>
+        <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+        <span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">MS Office</span>
       </div>
     </div>
   </div>
@@ -427,75 +450,51 @@
 <section id="experience">
   <div class="section-label">My Journey</div>
   <div class="section-title">Work <span>Experience</span></div>
-
   <div class="timeline">
-
     <div class="exp-item reveal">
       <div class="exp-dot"></div>
       <div class="exp-period">Aug 2025 — Present</div>
       <div class="exp-title">Sr. Digital Marketing Executive</div>
       <div class="exp-company">Sea Stars Consulting Pvt. Ltd</div>
       <div class="exp-tags">
-        <span class="exp-tag">Google Ads</span>
-        <span class="exp-tag">Meta Ads</span>
-        <span class="exp-tag">Campaign Optimization</span>
-        <span class="exp-tag">SEO (On-Page & Off-Page)</span>
-        <span class="exp-tag">WordPress</span>
-        <span class="exp-tag">Landing Page Creation</span>
-        <span class="exp-tag">Google Analytics</span>
-        <span class="exp-tag">Google Tag Manager</span>
-        <span class="exp-tag">Canva</span>
-        <span class="exp-tag">Keyword Research</span>
-        <span class="exp-tag">SMO</span>
-        <span class="exp-tag">Content Creation</span>
+        <span class="exp-tag">Google Ads</span><span class="exp-tag">Meta Ads</span><span class="exp-tag">Campaign Optimization</span>
+        <span class="exp-tag">SEO (On-Page & Off-Page)</span><span class="exp-tag">WordPress</span><span class="exp-tag">Landing Page Creation</span>
+        <span class="exp-tag">Google Analytics</span><span class="exp-tag">Google Tag Manager</span><span class="exp-tag">Canva</span>
+        <span class="exp-tag">Keyword Research</span><span class="exp-tag">SMO</span><span class="exp-tag">Content Creation</span>
       </div>
     </div>
-
     <div class="exp-item reveal">
       <div class="exp-dot"></div>
       <div class="exp-period">Aug 2023 — July 2025</div>
       <div class="exp-title">Digital Marketing Executive</div>
       <div class="exp-company">Raj Nandini Estates Pvt. Ltd</div>
       <div class="exp-tags">
-        <span class="exp-tag">Lead Generation</span>
-        <span class="exp-tag">Real Estate Portals</span>
-        <span class="exp-tag">99acres, MagicBricks</span>
-        <span class="exp-tag">Google Ads</span>
-        <span class="exp-tag">Meta Ads</span>
-        <span class="exp-tag">WhatsApp Marketing</span>
-        <span class="exp-tag">SEO & WordPress</span>
-        <span class="exp-tag">Performance Reporting</span>
-        <span class="exp-tag">Data Management</span>
+        <span class="exp-tag">Lead Generation</span><span class="exp-tag">Real Estate Portals</span>
+        <span class="exp-tag">99acres, MagicBricks</span><span class="exp-tag">Google Ads</span><span class="exp-tag">Meta Ads</span>
+        <span class="exp-tag">WhatsApp Marketing</span><span class="exp-tag">SEO & WordPress</span>
+        <span class="exp-tag">Performance Reporting</span><span class="exp-tag">Data Management</span>
       </div>
     </div>
-
     <div class="exp-item reveal">
       <div class="exp-dot"></div>
       <div class="exp-period">June 2022 — July 2023</div>
       <div class="exp-title">Digital Marketing Executive</div>
       <div class="exp-company">Padamshree Infotech</div>
       <div class="exp-tags">
-        <span class="exp-tag">Social Media Management</span>
-        <span class="exp-tag">Facebook Ads</span>
-        <span class="exp-tag">Email Marketing</span>
-        <span class="exp-tag">Creative Design</span>
-        <span class="exp-tag">Market Research</span>
-        <span class="exp-tag">Client Communication</span>
-        <span class="exp-tag">Campaign Reporting</span>
+        <span class="exp-tag">Social Media Management</span><span class="exp-tag">Facebook Ads</span>
+        <span class="exp-tag">Email Marketing</span><span class="exp-tag">Creative Design</span>
+        <span class="exp-tag">Market Research</span><span class="exp-tag">Client Communication</span><span class="exp-tag">Campaign Reporting</span>
       </div>
     </div>
-
     <div class="exp-item reveal">
       <div class="exp-dot"></div>
       <div class="exp-period">Freelance Projects</div>
       <div class="exp-title">Freelance Digital Marketer</div>
       <div class="exp-company">Fashion Fever · Adhyayan Institute & Training Center · Consumer Legal Solution</div>
       <div class="exp-tags">
-        <span class="exp-tag">Independent Projects</span>
-        <span class="exp-tag">Multi-industry Experience</span>
+        <span class="exp-tag">Independent Projects</span><span class="exp-tag">Multi-industry Experience</span>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -503,48 +502,15 @@
 <section id="education">
   <div class="section-label">Academic Background</div>
   <div class="section-title">Education & <span>Certifications</span></div>
-
   <div class="edu-grid">
-    <div class="edu-card reveal">
-      <div class="edu-year">2023</div>
-      <div class="edu-degree">MA (Post Graduation)</div>
-      <div class="edu-inst">IGNOU University</div>
-    </div>
-    <div class="edu-card reveal">
-      <div class="edu-year">2021</div>
-      <div class="edu-degree">BA (Graduation)</div>
-      <div class="edu-inst">Delhi University</div>
-    </div>
-    <div class="edu-card reveal">
-      <div class="edu-year">2018</div>
-      <div class="edu-degree">12th — Arts</div>
-      <div class="edu-inst">CBSE Board</div>
-    </div>
-    <div class="edu-card reveal">
-      <div class="edu-year">2016</div>
-      <div class="edu-degree">10th — High School</div>
-      <div class="edu-inst">CBSE Board</div>
-    </div>
-    <div class="edu-card reveal">
-      <div class="edu-year">Pursuing</div>
-      <div class="edu-degree">PG Certification — Digital Marketing & Analytics</div>
-      <div class="edu-inst">Intellipaat</div>
-    </div>
-    <div class="edu-card reveal">
-      <div class="edu-year">Certified</div>
-      <div class="edu-degree">IT Expert Diploma</div>
-      <div class="edu-inst">Earth Institute, Laxmi Nagar Delhi</div>
-    </div>
-    <div class="edu-card reveal">
-      <div class="edu-year">Certified</div>
-      <div class="edu-degree">CCC Certificate</div>
-      <div class="edu-inst">NIELIT</div>
-    </div>
-    <div class="edu-card reveal">
-      <div class="edu-year">Certified</div>
-      <div class="edu-degree">Fundamental Computer Applications</div>
-      <div class="edu-inst">6 Months Course</div>
-    </div>
+    <div class="edu-card reveal"><div class="edu-year">2023</div><div class="edu-degree">MA (Post Graduation)</div><div class="edu-inst">IGNOU University</div></div>
+    <div class="edu-card reveal"><div class="edu-year">2021</div><div class="edu-degree">BA (Graduation)</div><div class="edu-inst">Delhi University</div></div>
+    <div class="edu-card reveal"><div class="edu-year">2018</div><div class="edu-degree">12th — Arts</div><div class="edu-inst">CBSE Board</div></div>
+    <div class="edu-card reveal"><div class="edu-year">2016</div><div class="edu-degree">10th — High School</div><div class="edu-inst">CBSE Board</div></div>
+    <div class="edu-card reveal"><div class="edu-year">Pursuing</div><div class="edu-degree">PG Certification — Digital Marketing & Analytics</div><div class="edu-inst">Intellipaat</div></div>
+    <div class="edu-card reveal"><div class="edu-year">Certified</div><div class="edu-degree">IT Expert Diploma</div><div class="edu-inst">Earth Institute, Laxmi Nagar Delhi</div></div>
+    <div class="edu-card reveal"><div class="edu-year">Certified</div><div class="edu-degree">CCC Certificate</div><div class="edu-inst">NIELIT</div></div>
+    <div class="edu-card reveal"><div class="edu-year">Certified</div><div class="edu-degree">Fundamental Computer Applications</div><div class="edu-inst">6 Months Course</div></div>
   </div>
 </section>
 
@@ -556,24 +522,19 @@
     <div class="contact-links">
       <a href="mailto:payalkanojia27001@gmail.com" class="contact-link">
         <div class="cl-icon purple">✉️</div>
-        <div>
-          <div class="cl-label">Email</div>
-          <div class="cl-value">payalkanojia27001@gmail.com</div>
-        </div>
+        <div><div class="cl-label">Email</div><div class="cl-value">payalkanojia27001@gmail.com</div></div>
       </a>
       <a href="tel:+918929376368" class="contact-link">
         <div class="cl-icon pink">📞</div>
-        <div>
-          <div class="cl-label">Phone</div>
-          <div class="cl-value">+91 89293 76368</div>
-        </div>
+        <div><div class="cl-label">Phone</div><div class="cl-value">+91 89293 76368</div></div>
+      </a>
+      <a href="https://wa.me/918929376368" target="_blank" class="contact-link">
+        <div class="cl-icon green">💬</div>
+        <div><div class="cl-label">WhatsApp</div><div class="cl-value">Chat directly on WhatsApp</div></div>
       </a>
       <div class="contact-link" style="cursor:default">
         <div class="cl-icon purple">📍</div>
-        <div>
-          <div class="cl-label">Location</div>
-          <div class="cl-value">Sadarpur Colony, Sector 45, Noida</div>
-        </div>
+        <div><div class="cl-label">Location</div><div class="cl-value">Sadarpur Colony, Sector 45, Noida</div></div>
       </div>
     </div>
   </div>
